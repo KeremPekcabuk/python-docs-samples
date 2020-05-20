@@ -14,17 +14,91 @@
 
 # [START gae_python37_app]
 from flask import Flask
+from flask import request
+from flask import redirect
+from flask import url_for
+from flask import render_template
+import cgi
 
 
 # If `entrypoint` is not defined in app.yaml, App Engine will look for an app
 # called `app` in `main.py`.
 app = Flask(__name__)
 
+months = ['January',
+          'February',
+          'March',
+          'April',
+          'May',
+          'June',
+          'July',
+          'August',
+          'September',
+          'October',
+          'November',
+          'December']
 
-@app.route('/')
-def hello():
-    """Return a friendly HTTP greeting."""
-    return 'Hello World!'
+def valid_month(month):
+    controlmonth = month.capitalize()
+    if controlmonth in months:
+        return controlmonth
+    else: return None
+
+def escape_html(s):
+    return cgi.escape(s,quote=True)
+
+# <form method="post" action="/testform">
+# <input name="q" type="checkbox"></input>
+form = """
+<form method="post" action="testform">
+
+<label>One
+<input name="month" type="text"></input>
+</label>
+
+</br>
+<input type="submit"></input>
+
+<div style="color:red">%(error)s</div>
+
+</form>
+"""
+def strchange(error):
+    return (form % {"error":error})
+
+# asdsad
+# @app.route('/', methods=['GET', 'POST'])   
+# def postform():    
+#     """Return a friendly HTTP greeting."""
+#     return strchange('')
+
+
+@app.route('/', methods=['GET', 'POST'])
+def hello2():
+    items = request.args.getlist('food')
+    return render_template('form.html',items=items)
+
+@app.route('/thanks', methods=['GET', 'POST'])
+def thanks():
+    # reqforkerem = request.form.get('food')
+    reqforkerem = request.form.getlist('foods')
+    # foods = ['a','b','c']
+    return render_template('thanks.html')
+    # return render_template('thanks.html',foods=reqforkerem)
+
+        
+# def postform2():    
+#     if request.method == 'POST':
+#         reqforkerem = request.form.get('month')
+#         ret_val = valid_month(reqforkerem)
+#         return ret_val
+
+
+    # deneme = request
+    # """Return a friendly HTTP greeting."""
+    # return deneme
+
+
 
 
 if __name__ == '__main__':

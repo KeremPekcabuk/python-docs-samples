@@ -1,0 +1,37 @@
+<!-- <form method="post" action="thanks"> -->
+<form>
+    <input name="food" type="text"></input>
+    <!-- <input name="food" type="text"></input>
+    <input name="food" type="text"></input> -->
+    <!-- {% if items %}
+        {% for item in items %}
+        <input type="hidden" name="food" type="text" value="{{item}}"></input>
+        {% endfor %}
+    {% endif %} -->
+    <!-- value="{{item}}" -->
+
+    <!-- This creates a hidden input for storing query parameters
+    actually this is unnecessary but udacity sample made this trick because of the old 
+version of FLASK -->
+    {% for item in items %}
+        <input name="food"  type="hidden" value="{{item}}"></input>
+    {% endfor %}
+    <button>Add</button>  
+
+    </br>
+    {% for food in request.args.getlist('food') %}
+    <li>{{ food }}</li>
+    {% endfor %}
+    <!-- {{ request.args.getlist('food') }} -->
+
+    <!-- <input type="submit"></input> -->
+       
+</form>
+    
+
+<!-- <form  method="post">
+    <h2>Add a button</h2>
+    <input type="text" name="food">
+    <button type="button">Add</button>
+    <li><a href="{{ url_for('thanks') }}">Register</a>
+</form> -->
